@@ -22,6 +22,7 @@ jobs:
         run: |
           wget -q https://repo1.maven.org/maven2/com/github/spotbugs/spotbugs/4.8.6/spotbugs-4.8.6.tgz
           tar -xzf spotbugs-4.8.6.tgz
+          chmod +x spotbugs-4.8.6/bin/spotbugs
 
       - name: Run SpotBugs analysis
         run: ./spotbugs-4.8.6/bin/spotbugs -textui -effort:max -low target/classes | tee spotbugs-report.txt
