@@ -1,0 +1,30 @@
+name: SpotBugs Analysis
+
+on: [push]
+
+jobs:
+  spotbugs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Compile project
+        run: mvn -q compile
+
+      - name: Download SpotBugs
+        run: |
+          wget -q https://repo1.maven.org/maven2/com/github/spotbugs/spotbugs/4.8.6/spotbugs-4.8.6.tgz
+          tar -xzf spotbugs-4.8.6.tgz
+
+      - name: Run SpotBugs analysis
+        run: ./spotbugs-4.8.6/bin/spotbugs -textui -effort:max -low target/classes | tee spotbugs-report.txt
+
+      - name: Print report
+        run: cat spotbugs-report.txt
